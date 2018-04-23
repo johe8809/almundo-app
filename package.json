@@ -1,0 +1,37 @@
+{
+  "name": "almundo_app",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "android": "npm run build && concurrently -r 'npm run watch' 'react-native run-android'",
+    "ios": "npm run build && concurrently -r 'npm run watch' 'react-native run-ios'",
+    "test": "jest --coverage",
+    "tsc": "tsc --noLib",
+    "clean": "rimraf lib",
+    "build": "npm run clean && gulp resource-copy && npm run tsc --",
+    "lint": "tslint src/**/*.ts",
+    "watch": "npm run build -- -w",
+    "clock": "adb shell \"date `date +%m%d%H%M%Y.%S`\""
+  },
+  "dependencies": {
+    "react": "16.3.1",
+    "react-native": "0.55.3"
+  },
+  "devDependencies": {
+    "babel-jest": "22.4.3",
+    "babel-preset-react-native": "4.0.0",
+    "jest": "22.4.3",
+    "react-test-renderer": "16.3.1",
+    "@types/jest": "^22.2.2",
+    "@types/react-native": "^0.52.24",
+    "gulp": "^3.9.1",
+    "gulp-typescript": "^4.0.2",
+    "tslint": "^5.9.1",
+    "typescript": "^2.8.1",
+    "vinyl-source-stream": "^2.0.0"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}
