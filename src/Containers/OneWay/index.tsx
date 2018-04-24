@@ -66,7 +66,7 @@ export default class OneWay extends Component {
                         value={this.state.dateDeparture} />
                 </View>
                 <View style={styles.btnSearchContainer}>
-                    <TouchableOpacity style={styles.btnSearch} onPress={() => Actions.home()}>
+                    <TouchableOpacity style={styles.btnSearch} onPress={() => Actions.flightsResultSearch()}>
                         <IconMaterialIcons name={'search'} style={styles.iconTab} />
                         <Text style={styles.textTab}>{'BUSCAR'}</Text>
                     </TouchableOpacity>
