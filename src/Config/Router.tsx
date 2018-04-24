@@ -5,6 +5,7 @@ import OneWay from '../Containers/OneWay';
 import ResultSearch from '../Containers/ResultSearch';
 import RoundTrip from '../Containers/RoundTrip';
 import Multidestination from '../Containers/Multidestination';
+import DetailFlight from '../Containers/DetailFlight';
 
 export default class Routes extends Component {
     render() {
@@ -18,6 +19,7 @@ export default class Routes extends Component {
                     <Scene key="flightsRoundTrip" component={RoundTrip} title="Ida y vuelta" />
                     <Scene key="flightsMultidestination" component={Multidestination} title="Multidestino" />
                     <Scene key="flightsResultSearch" component={ResultSearch} title="Elegir vuelos" />
+                    <Scene key="flightDetail" component={DetailFlight} title="Detalle" />
                 </Scene>
             </Router>
         );
