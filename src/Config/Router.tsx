@@ -4,6 +4,7 @@ import Home from '../Containers/Home';
 import OneWay from '../Containers/OneWay';
 import ResultSearch from '../Containers/ResultSearch';
 import RoundTrip from '../Containers/RoundTrip';
+import Multidestination from '../Containers/Multidestination';
 
 export default class Routes extends Component {
     render() {
@@ -15,6 +16,7 @@ export default class Routes extends Component {
                     <Scene key="home" component={Home} title={'Vuelos'} init={true} initial={true} tintColor='white' />
                     <Scene key="flightsOneWay" component={OneWay} title="Ida" />
                     <Scene key="flightsRoundTrip" component={RoundTrip} title="Ida y vuelta" />
+                    <Scene key="flightsMultidestination" component={Multidestination} title="Multidestino" />
                     <Scene key="flightsResultSearch" component={ResultSearch} title="Elegir vuelos" />
                 </Scene>
             </Router>

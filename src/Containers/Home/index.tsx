@@ -16,7 +16,7 @@ export default class Home extends Component {
                     <IconMaterialIcons name={'compare-arrows'} style={styles.iconTab} />
                     <Text style={styles.textTab}>{'IDA Y VUELTA'}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.tab} onPress={() => Actions.flightsOneWay()} >
+                <TouchableOpacity style={styles.tab} onPress={() => Actions.flightsMultidestination()} >
                     <IconMaterialIcons name={'list'} style={styles.iconTab} />
                     <Text style={styles.textTab}>{'MULTIDESTINO'}</Text>
                 </TouchableOpacity>
