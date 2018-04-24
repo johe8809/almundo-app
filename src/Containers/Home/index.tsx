@@ -12,7 +12,7 @@ export default class Home extends Component {
                     <IconMaterialIcons name={'arrow-forward'} style={styles.iconTab} />
                     <Text style={styles.textTab}>{'IDA'}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.tab} onPress={() => Actions.flightsOneWay()}>
+                <TouchableOpacity style={styles.tab} onPress={() => Actions.flightsRoundTrip()}>
                     <IconMaterialIcons name={'compare-arrows'} style={styles.iconTab} />
                     <Text style={styles.textTab}>{'IDA Y VUELTA'}</Text>
                 </TouchableOpacity>
