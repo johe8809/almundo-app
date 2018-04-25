@@ -15,7 +15,7 @@ export default class Routes extends Component {
                     navigationBarStyle={{ backgroundColor: 'rgba(3, 155, 229, 1)' }}
                     navBarButtonColor='white'>
                     <Scene key="home" component={Home} title={'Vuelos'} init={true} initial={true} tintColor='white' />
-                    <Scene key="flightsOneWay" component={OneWay} title="Ida" />
+                    <Scene key="flightsOneWay" component={OneWay} title="Solo ida" />
                     <Scene key="flightsRoundTrip" component={RoundTrip} title="Ida y vuelta" />
                     <Scene key="flightsMultidestination" component={Multidestination} title="Multidestino" />
                     <Scene key="flightsResultSearch" component={ResultSearch} title="Elegir vuelos" />

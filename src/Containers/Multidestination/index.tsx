@@ -58,7 +58,6 @@ export default class Multidestination extends Component {
                 }
                 <View style={styles.btnSearchContainer}>
                     <TouchableOpacity style={styles.tab} onPress={() => Actions.flightsResultSearch()}>
-                        <IconMaterialIcons name={'search'} style={styles.iconTab} />
                         <Text style={styles.textTab}>{'BUSCAR'}</Text>
                     </TouchableOpacity>
                 </View>

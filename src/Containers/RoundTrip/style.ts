@@ -17,16 +17,14 @@ export const styles = {
         height: 36,
         borderRadius: 3,
     },
+    buttonDisabled: {
+        backgroundColor: 'rgba(2, 119, 189, 0.5)',
+    },
     textTab: {
         paddingLeft: 16,
         textAlign: 'left',
         color: 'rgba(255, 255, 255, 1)',
         fontWeight: 'bold'
-    },
-    iconTab: {
-        fontWeight: 'bold',
-        color: 'rgba(255, 255, 255, 1)',
-        fontSize: 24,
     },
     containerInput: {
         flexDirection: 'row',

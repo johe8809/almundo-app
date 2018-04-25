@@ -1,6 +1,16 @@
 export const styles = {
     container: {
         margin: 8,
+        padding: 8,
+        backgroundColor: 'rgba(255, 255, 255, 1)',
+    },
+    containerOptions: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    textTypeFlight: {
+        fontWeight: 'bold',
+        marginBottom: 16
     },
     tab: {
         flexDirection: 'row',
@@ -8,18 +18,18 @@ export const styles = {
         justifyContent: 'flex-start',
         alignItems: 'center',
         marginBottom: 8,
+        marginRight: 2,
         padding: 8,
-        height: 48,
+        height: 36,
+        borderRadius: 3,
+        width: 322 / 3
     },
     textTab: {
-        paddingLeft: 16,
         textAlign: 'left',
         color: 'rgba(255, 255, 255, 1)',
-        fontWeight: 'bold'
+        fontSize: 11,
     },
     iconTab: {
-        fontWeight: 'bold',
         color: 'rgba(255, 255, 255, 1)',
-        fontSize: 16,
     }
 }

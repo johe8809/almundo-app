@@ -2,6 +2,10 @@ export const styles = {
     container: {
         margin: 8,
     },
+    noResult: {
+        backgroundColor: 'rgba(255, 255, 255, 1)',
+        padding: 8
+    },
     containerI: {
         backgroundColor: 'rgba(255, 255, 255, 1)',
         flexDirection: 'row',
@@ -28,22 +32,18 @@ export const styles = {
         paddingRight: 8,
     },
     price: {
-        // color: 'rgba(255, 255, 255, 1)',
         textAlign: 'right'
     },
     iata: {
         fontSize: 24,
         textAlign: 'center',
         fontWeight: 'bold',
-        // color: '#fff',
     },
     datetime: {
         textAlign: 'center',
-        // color: '#fff',
     },
     flightDatetime: {
         flexGrow: 2,
-        // backgroundColor: 'rgba(79, 195, 247, 1)',
         borderWidth: 1,
         borderColor: 'rgba(97, 97, 97, 1)',
         padding: 8,
@@ -51,5 +51,10 @@ export const styles = {
     },
     arrow: {
         flexGrow: 1,
+    },
+    iconArrow: {
+        textAlign: 'center',
+        color: 'rgba(97, 97, 97, 1)',
+        fontSize: 24
     }
 }
