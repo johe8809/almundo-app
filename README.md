@@ -42,5 +42,8 @@ npm run watch
 react-native run-android
 ```
 
+7. Listado de vuelos para probar en la aplicación
+![alt text](screenshots/querys.png "Listado de vuelos")
+
 ## Desarrollador
 Yonnathan Henao
