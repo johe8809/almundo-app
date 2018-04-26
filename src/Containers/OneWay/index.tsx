@@ -1,22 +1,37 @@
 import React, { Component } from 'react';
-import { View, TextInput, TouchableOpacity, Text, DatePickerAndroid, Keyboard } from 'react-native';
-import IconEndtypo from 'react-native-vector-icons/dist/Entypo';
-import IconFontAwesome from 'react-native-vector-icons/dist/FontAwesome';
+import { View, DatePickerAndroid, Keyboard } from 'react-native';
 import Sugar from 'sugar';
 import { Actions } from 'react-native-router-flux';
 import { getFlights } from '../../Api';
+import { citiesArr } from '../../Api/cities';
 import { styles } from './style';
+import OneWayForm from '../../Components/OneWayForm';
 
 export default class OneWay extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            origin: 'MDE',
-            destination: 'CLO',
-            dateDeparture: ''
+            origin: {
+                iata: '',
+                name: ''
+            },
+            destination: {
+                iata: '',
+                name: ''
+            },
+            dateDeparture: '',
+            focusOrigin: true,
+            fieldSearch: '',
+            cities: []
         }
+        this.onFocus = this.onFocus.bind(this);
+        this.searchFlights = this.searchFlights.bind(this);
+        this.showAndroidDatePickerDeparture = this.showAndroidDatePickerDeparture.bind(this);
+        this.searchCity = this.searchCity.bind(this);
+        this.renderCities = this.renderCities.bind(this)
     }
-    async showAndroidDatePicker() {
+    async showAndroidDatePickerDeparture() {
+        Keyboard.dismiss();
         try {
             const { action, year, month, day } = await DatePickerAndroid.open({
                 minDate: new Date(),
@@ -32,55 +47,51 @@ export default class OneWay extends Component {
         }
     }
     async searchFlights() {
-        const dateDeparture = Sugar.Date(this.state.dateDeparture).format('{yyyy}-{MM}-{dd}').raw;
+        const { origin, destination, dateDeparture } = this.state;
+        const dateDep = Sugar.Date(dateDeparture).format('{yyyy}-{MM}-{dd}').raw;
         const params = {
-            origin: this.state.origin,
-            destination: this.state.destination,
-            dateDeparture
+            origin: origin.iata,
+            destination: destination.iata,
+            dateDeparture: dateDep
         }
+
         const flights = await getFlights(Sugar.Object.toQueryString(params));
-        Actions.flightsResultSearch(flights);
+        Actions.flightsResultSearch({ flights })
+    }
+    onFocus(field) {
+        this.setState({
+            focusOrigin: !this.state.focusOrigin,
+            [field]: '',
+            fieldSearch: field
+        });
+    }
+    searchCity(text, field) {
+        const cities = citiesArr.filter((item) => {
+            return item.name.toLowerCase().indexOf(text.toLowerCase()) > -1;
+        });
+        this.setState({
+            [field]: text,
+            cities
+        });
+    }
+    renderCities(city, field) {
+        this.setState({
+            [field]: city,
+            focusOrigin: true,
+            cities: []
+        });
     }
     render() {
-        const { origin, destination, dateDeparture } = this.state;
-        const disabledButton = !origin || !destination || !dateDeparture;
         return (
             <View style={styles.container}>
-                <View style={styles.containerInput}>
-                    <IconEndtypo name={'aircraft-take-off'} color="rgba(180, 180, 180, 1)" size={24} />
-                    <TextInput style={styles.textInput}
-                        placeholderTextColor={'rgba(180, 180, 180, 1)'}
-                        placeholder={'Ciudad de origen'}
-                        underlineColorAndroid={'rgba(180, 180, 180, 1)'}
-                        onChangeText={(text) => this.setState({ origin: text })}
-                        value={origin} />
-                </View>
-                <View style={styles.containerInput}>
-                    <IconEndtypo name={'aircraft-landing'} color="rgba(180, 180, 180, 1)" size={24} />
-                    <TextInput style={styles.textInput}
-                        placeholderTextColor={'rgba(180, 180, 180, 1)'}
-                        placeholder={'Ciudad destino'}
-                        underlineColorAndroid={'rgba(180, 180, 180, 1)'}
-                        onChangeText={(text) => this.setState({ destination: text })}
-                        value={destination} />
-                </View>
-                <View style={styles.containerInput}>
-                    <IconFontAwesome name={'calendar'} color="rgba(180, 180, 180, 1)" size={24} />
-                    <TextInput style={styles.textInput}
-                        placeholderTextColor={'rgba(180, 180, 180, 1)'}
-                        placeholder={'Fecha salida'}
-                        underlineColorAndroid={'rgba(180, 180, 180, 1)'}
-                        onFocus={() => { Keyboard.dismiss(); this.showAndroidDatePicker() }}
-                        value={dateDeparture} />
-                </View>
-                <View style={styles.btnSearchContainer}>
-                    <TouchableOpacity
-                        style={[styles.btnSearch, disabledButton && styles.buttonDisabled]}
-                        disabled={disabledButton}
-                        onPress={() => !disabledButton && this.searchFlights()}>
-                        <Text style={styles.textTab}>{'BUSCAR'}</Text>
-                    </TouchableOpacity>
-                </View>
+                <OneWayForm
+                    onFocus={this.onFocus}
+                    searchFlights={this.searchFlights}
+                    searchCity={this.searchCity}
+                    renderCities={this.renderCities}
+                    showAndroidDatePickerDeparture={this.showAndroidDatePickerDeparture}
+                    {...this.state}
+                />
             </View>
         )
     }

@@ -34,5 +34,10 @@ export const styles = {
         height: 50,
         width: 308,
         color: 'rgba(97, 97, 97, 1)'
+    },
+    itemCity: {
+        padding: 8,
+        borderBottomWidth: 1,
+        borderBottomColor: 'rgba(180, 180, 180, 1)',
     }
 }

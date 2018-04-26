@@ -9,19 +9,29 @@ import { styles } from './style';
 export default class ResultSearch extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            flights: []
-        }
-    }
-    componentDidMount() {
-        this.setState({ flights: this.props.data });
+        // this.state = {
+        //     flights: [],
+        //     flightsArrival: []
+        // }
     }
     render() {
+        const { flights, flightsArrival } = this.props;
+        // console.log(flights);
+        
         return (
             <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-                {!this.state.flights.length ?
-                    <View style={styles.noResult}>
-                        < Text>{'No hay vuelos disponibles.'}</Text>
+                {!flights.length ?
+                    <View>
+                        <View style={styles.titleTypeFlight}>
+                            <IconMaterialIcons
+                                name={'arrow-forward'}
+                                color="rgba(255, 255, 255, 1)"
+                                size={14} />
+                            <Text style={styles.titleFlight}>{' Vuelos ida'}</Text>
+                        </View>
+                        <View style={styles.noResult}>
+                            < Text>{'No hay vuelos disponibles.'}</Text>
+                        </View>
                     </View>
                     :
                     <View>
@@ -30,10 +40,10 @@ export default class ResultSearch extends Component {
                                 name={'arrow-forward'}
                                 color="rgba(255, 255, 255, 1)"
                                 size={14} />
-                            <Text style={styles.titleFlight}>{' Solo ida'}</Text>
+                            <Text style={styles.titleFlight}>{' Vuelos ida'}</Text>
                         </View>
                         <FlatList
-                            data={this.state.flights}
+                            data={flights}
                             // extraData={this.state.offers}
                             keyExtractor={(item) => item._id}
                             renderItem={({ item }) => {
@@ -63,6 +73,57 @@ export default class ResultSearch extends Component {
                                 )
                             }}
                         />
+                    </View>
+                }
+                {flightsArrival &&
+                    <View>
+                        {!flightsArrival ?
+                            <View style={styles.noResult}>
+                                < Text>{'No hay vuelos disponibles.'}</Text>
+                            </View>
+                            :
+                            <View>
+                                <View style={styles.titleTypeFlight}>
+                                    <IconMaterialIcons
+                                        name={'arrow-back'}
+                                        color="rgba(255, 255, 255, 1)"
+                                        size={14} />
+                                    <Text style={styles.titleFlight}>{' Vuelos regreso'}</Text>
+                                </View>
+                                <FlatList
+                                    data={flightsArrival}
+                                    // extraData={this.state.offers}
+                                    keyExtractor={(item) => item._id}
+                                    renderItem={({ item }) => {
+                                        const dateDeparture = Sugar.Date(item.dateDeparture).format('{Mon} {dd}').raw;
+                                        const dateArrival = Sugar.Date(item.dateArrival).format('{Mon} {dd}').raw;
+                                        return (
+                                            <TouchableOpacity onPress={() => Actions.flightDetail(item)}>
+                                                <View style={styles.priceContent}>
+                                                    <Text style={styles.price}>{item.price}</Text>
+                                                </View>
+                                                <View style={styles.containerI}>
+                                                    <View style={styles.flightDatetime}>
+                                                        <Text style={styles.iata}>{item.destination.iata}</Text>
+                                                        <Text style={styles.datetime}>{`Sale ${dateDeparture}`}</Text>
+                                                        <Text style={styles.datetime}>{item.hourDeparture}</Text>
+                                                    </View>
+                                                    <View style={styles.arrow}>
+                                                        <IconEndtypo name={'arrow-long-left'}
+                                                            style={styles.iconArrow} />
+                                                    </View>
+                                                    <View style={styles.flightDatetime}>
+                                                        <Text style={styles.iata}>{item.origin.iata}</Text>
+                                                        <Text style={styles.datetime}>{`Llega ${dateArrival}`}</Text>
+                                                        <Text style={styles.datetime}>{item.hourArrival}</Text>
+                                                    </View>
+                                                </View>
+                                            </TouchableOpacity>
+                                        )
+                                    }}
+                                />
+                            </View>
+                        }
                     </View>
                 }
             </ScrollView >
