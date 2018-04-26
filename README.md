@@ -2,10 +2,10 @@
 Aplicación final del semillero de Almundo. La aplicación se realizó en React Native y Typescript.
 El usuario en la aplicación va a poder listar los vuelos dependiendo del tipo de consulta que quiera realizar y poder ver el detalle de cada vuelo.
 
-![alt text](screenshots/home.png "Pantalla de inicio")
-![alt text](screenshots/oneway.png "Pantalla de vuelos solo ida")
-![alt text](screenshots/roundtrip.png "Pantalla de vuelos ida y vuelta")
-![alt text](screenshots/multidestination.png "Pantalla de vuelos multidestino")
+1. ![alt text](screenshots/home.png "Pantalla de inicio")
+2. ![alt text](screenshots/oneway.png "Pantalla de vuelos solo ida")
+3. ![alt text](screenshots/roundtrip.png "Pantalla de vuelos ida y vuelta")
+4. ![alt text](screenshots/multidestination.png "Pantalla de vuelos multidestino")
 
 ## Pre-requisitos
 
