@@ -10,9 +10,9 @@ El usuario en la aplicación va a poder listar los vuelos dependiendo del tipo d
 ## Pre-requisitos
 
 Para correr el proyecto se debe tener instalado principalmente:
-[NodeJs](https://nodejs.org/es/download/)
-React Native (`npm install -g react-native-cli`)
-Emulador de android.
+1. [NodeJs](https://nodejs.org/es/download/)
+2. React Native (`npm install -g react-native-cli`)
+3. Emulador de android.
 
 
 ## Instalación
