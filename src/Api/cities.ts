@@ -14,5 +14,9 @@ export const citiesArr = [
     {
         iata: "MZL",
         name: "Manizales"
+    },
+    {
+        iata: "BOG",
+        name: "Bogotá"
     }
 ]

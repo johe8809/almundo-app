@@ -1,43 +1,75 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList } from 'react-native';
 import IconEndtypo from 'react-native-vector-icons/dist/Entypo';
 import IconFontAwesome from 'react-native-vector-icons/dist/FontAwesome';
+import IconMaterialIcons from 'react-native-vector-icons/dist/MaterialIcons';
 import InputCustom from '../InputCustom';
 import { styles } from './style';
 
 const RoundTripForm = (props) => {
     const {
-        onFocusOrigin,
-        onChangeTextOrigin,
+        onFocus,
+        searchCity,
         searchFlights,
-        showAndroidDatePickerDeparture,
-        showAndroidDatePickerArrival,
+        showAndroidDatePicker,
         origin,
         destination,
         dateDeparture,
-        dateArrival
+        dateArrival,
+        cities,
+        renderCities,
+        focusOrigin,
+        fieldSearch,
+        cancelSearch
     } = props;
 
-    const disabledButton = !origin && !destination && !dateDeparture && !dateArrival;
+    const disabledButton = !origin.iata || !destination.iata || !dateDeparture;
     const iconOrgin = () => <IconEndtypo name={'aircraft-take-off'} color="rgba(180, 180, 180, 1)" size={24} />;
     const iconDestination = () => <IconEndtypo name={'aircraft-landing'} color="rgba(180, 180, 180, 1)" size={24} />;
     const iconCalendar = () => <IconFontAwesome name={'calendar'} color="rgba(180, 180, 180, 1)" size={24} />;
-
+    const iconBack = () => {
+        return <IconMaterialIcons name={'arrow-back'} color="rgba(180, 180, 180, 1)"
+            onPress={() => cancelSearch(fieldSearch)} size={24} />;
+    }
     return (
         <View>
-            <InputCustom onFocus={onFocusOrigin} onChangeText={onChangeTextOrigin} value={origin} icon={iconOrgin} />
-            <InputCustom onFocus={onFocusOrigin} onChangeText={onChangeTextOrigin} value={destination}
-                icon={iconDestination} />
-            <InputCustom onFocus={showAndroidDatePickerDeparture} value={dateDeparture} icon={iconCalendar} />
-            <InputCustom onFocus={showAndroidDatePickerArrival} value={dateArrival} icon={iconCalendar} />
-            <View style={styles.btnSearchContainer}>
-                <TouchableOpacity
-                    style={[styles.btnSearch, disabledButton && styles.buttonDisabled]}
-                    disabled={disabledButton}
-                    onPress={searchFlights}>
-                    <Text style={styles.textTab}>{'BUSCAR'}</Text>
-                </TouchableOpacity>
-            </View>
+            {focusOrigin ?
+                <View>
+                    <InputCustom placeholder={'Ciudad de origen'} onFocus={() => onFocus('origin')} icon={iconOrgin}
+                        onChangeText={(text) => searchCity(text, 'origin')}
+                        value={`${origin.name}`} />
+                    <InputCustom placeholder={'Ciudad destino'} onFocus={() => onFocus('destination')}
+                        icon={iconDestination} onChangeText={searchCity}
+                        value={`${destination.name}`} />
+                    <InputCustom placeholder={'Fecha salida'} value={dateDeparture} icon={iconCalendar}
+                        onFocus={() => showAndroidDatePicker('dateDeparture')} />
+                    <InputCustom placeholder={'Fecha llegada'} value={dateArrival} icon={iconCalendar}
+                        onFocus={() => showAndroidDatePicker('dateArrival')} />
+                    <View style={styles.btnSearchContainer}>
+                        <TouchableOpacity
+                            style={[styles.btnSearch, disabledButton && styles.buttonDisabled]}
+                            disabled={disabledButton}
+                            onPress={searchFlights}>
+                            <Text style={styles.textTab}>{'BUSCAR'}</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View> :
+                <View>
+                    <InputCustom icon={iconBack}
+                        onChangeText={(text) => searchCity(text, fieldSearch)} />
+                    <FlatList
+                        data={cities}
+                        keyExtractor={(item) => item.iata}
+                        renderItem={({ item }) => {
+                            return (
+                                <TouchableOpacity onPress={() => renderCities(item, fieldSearch)}
+                                    style={styles.itemCity}>
+                                    <Text>{`${item.iata} - ${item.name}`}</Text>
+                                </TouchableOpacity>
+                            )
+                        }}
+                    />
+                </View>}
         </View>
     )
 };

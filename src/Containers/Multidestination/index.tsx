@@ -127,21 +127,23 @@ export default class Multidestination extends Component {
         const disabledAccept = !origin.iata || !destination.iata || !dateDeparture;
         return (
             <View style={styles.container}>
-                <View showsVerticalScrollIndicator={false}>
-                    {flightsAdded.map((item, index) => {
-                        return (
-                            <View key={index.toString()}>
-                                <View style={styles.titleTypeFlight}>
-                                    <IconMaterialIcons
-                                        name={'flight'}
-                                        color="rgba(255, 255, 255, 1)"
-                                        size={14} />
-                                    <Text style={styles.titleFlight}>{` Vuelo ${index + 1}`}</Text>
-                                </View>
-                            </View>)
-                    })
-                    }
-                </View>
+                {focusOrigin === true &&
+                    <View showsVerticalScrollIndicator={false}>
+                        {flightsAdded.map((item, index) => {
+                            return (
+                                <View key={index.toString()}>
+                                    <View style={styles.titleTypeFlight}>
+                                        <IconMaterialIcons
+                                            name={'flight'}
+                                            color="rgba(255, 255, 255, 1)"
+                                            size={14} />
+                                        <Text style={styles.titleFlight}>{` Vuelo ${index + 1}`}</Text>
+                                    </View>
+                                </View>)
+                        })
+                        }
+                    </View>
+                }
                 {openForm === true &&
                     <View>
                         <MultidestinationForm
@@ -171,7 +173,7 @@ export default class Multidestination extends Component {
                         </TouchableOpacity>
                     </View>
                 }
-                {flightsAdded.length > 0 &&
+                {flightsAdded.length > 0 && focusOrigin === true &&
                     <View>
                         <TouchableOpacity style={[styles.tab]} onPress={() => this.searchFlights()}>
                             <Text style={styles.textTab}>{'BUSCAR'}</Text>
