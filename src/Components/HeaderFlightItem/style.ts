@@ -1,7 +1,4 @@
 export const styles = {
-    container: {
-        margin: 8,
-    },
     noResult: {
         backgroundColor: 'rgba(255, 255, 255, 1)',
         padding: 8
