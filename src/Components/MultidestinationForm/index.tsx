@@ -1,16 +1,15 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, FlatList } from 'react-native';
-import IconEndtypo from 'react-native-vector-icons/dist/Entypo';
-import IconFontAwesome from 'react-native-vector-icons/dist/FontAwesome';
 import IconMaterialIcons from 'react-native-vector-icons/dist/MaterialIcons';
 import InputCustom from '../InputCustom';
+import { iconOrgin, iconDestination, iconCalendar } from '../../Helpers';
 import { styles } from './style';
 
 const MultidestinationForm = (props) => {
     const {
         onFocus,
         searchCity,
-        showAndroidDatePickerDeparture,
+        showAndroidDatePicker,
         origin,
         destination,
         dateDeparture,
@@ -21,12 +20,9 @@ const MultidestinationForm = (props) => {
         cancelSearch
     } = props;
 
-    const iconOrgin = () => <IconEndtypo name={'aircraft-take-off'} color="rgba(180, 180, 180, 1)" size={24} />;
-    const iconDestination = () => <IconEndtypo name={'aircraft-landing'} color="rgba(180, 180, 180, 1)" size={24} />;
-    const iconCalendar = () => <IconFontAwesome name={'calendar'} color="rgba(180, 180, 180, 1)" size={24} />;
     const iconBack = () => {
-        return <IconMaterialIcons name={'arrow-back'} color="rgba(180, 180, 180, 1)"
-            onPress={() => cancelSearch(fieldSearch)} size={24} />;
+        return (<IconMaterialIcons name={'arrow-back'} color="rgba(180, 180, 180, 1)"
+            onPress={() => cancelSearch(fieldSearch)} size={24} />);
     }
 
     return (
@@ -38,7 +34,7 @@ const MultidestinationForm = (props) => {
                     <InputCustom placeholder={'Ciudad destino'} onFocus={() => onFocus('destination')}
                         icon={iconDestination} onChangeText={(text) => searchCity(text, 'destinationa')}
                         value={`${destination.name}`} />
-                    <InputCustom placeholder={'Fecha salida'} onFocus={showAndroidDatePickerDeparture}
+                    <InputCustom placeholder={'Fecha salida'} onFocus={() => showAndroidDatePicker('dateDeparture')}
                         value={dateDeparture} icon={iconCalendar} />
                 </View> :
                 <View>

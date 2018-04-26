@@ -33,12 +33,12 @@ export default class Multidestination extends Component {
         this.state = initialState;
         this.onFocus = this.onFocus.bind(this);
         this.searchFlights = this.searchFlights.bind(this);
-        this.showAndroidDatePickerDeparture = this.showAndroidDatePickerDeparture.bind(this);
+        this.showAndroidDatePicker = this.showAndroidDatePicker.bind(this);
         this.searchCity = this.searchCity.bind(this);
         this.renderCities = this.renderCities.bind(this);
         this.cancelSearch = this.cancelSearch.bind(this);
     }
-    async showAndroidDatePickerDeparture() {
+    async showAndroidDatePicker(field) {
         Keyboard.dismiss();
         try {
             const { action, year, month, day } = await DatePickerAndroid.open({
@@ -48,7 +48,7 @@ export default class Multidestination extends Component {
             if (action !== DatePickerAndroid.dismissedAction) {
                 const date = `${year}-${month + 1}-${day}`;
                 const dateSelected = Sugar.Date(date).format('{dd} {mon} {yyyy}', 'es');
-                this.setState({ dateDeparture: dateSelected.raw })
+                this.setState({ [field]: dateSelected.raw })
             }
         } catch ({ code, message }) {
             console.warn('Cannot open date picker', message);
@@ -151,7 +151,7 @@ export default class Multidestination extends Component {
                             addFlight={this.addFlight}
                             searchCity={this.searchCity}
                             renderCities={this.renderCities}
-                            showAndroidDatePickerDeparture={this.showAndroidDatePickerDeparture}
+                            showAndroidDatePicker={this.showAndroidDatePicker}
                             cancelSearch={this.cancelSearch}
                             {...this.state}
                         />
