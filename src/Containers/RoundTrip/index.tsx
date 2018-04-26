@@ -1,24 +1,35 @@
 import React, { Component } from 'react';
-import { View, TextInput, TouchableOpacity, Text, Keyboard, DatePickerAndroid } from 'react-native';
-import IconEndtypo from 'react-native-vector-icons/dist/Entypo';
-import IconFontAwesome from 'react-native-vector-icons/dist/FontAwesome';
-import IconMaterialIcons from 'react-native-vector-icons/dist/MaterialIcons';
+import { View, TouchableOpacity, Text, Keyboard, DatePickerAndroid, FlatList } from 'react-native';
 import Sugar from 'sugar';
 import { Actions } from 'react-native-router-flux';
+import IconFontAwesome from 'react-native-vector-icons/dist/FontAwesome';
 import { getFlights } from '../../Api';
+import { citiesArr } from '../../Api/cities';
+import RoundTripForm from '../../Components/RoundTripForm';
+import InputCustom from '../../Components/InputCustom';
 import { styles } from './style';
 
 export default class RoundTrip extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            origin: 'MDE',
+            origin: '',
             destination: 'CLO',
-            dateDeparture: '',
-            dateArrival: ''
+            dateDeparture: '08 May 2018',
+            dateArrival: '12 May 2018',
+            focusOrigin: true,
+            cities: []
         }
+        this.onFocusOrigin = this.onFocusOrigin.bind(this);
+        this.onChangeTextOrigin = this.onChangeTextOrigin.bind(this);
+        this.searchFlights = this.searchFlights.bind(this);
+        this.searchCity = this.searchCity.bind(this);
+        this.selectCity = this.selectCity.bind(this);
+        this.showAndroidDatePickerDeparture = this.showAndroidDatePickerDeparture.bind(this);
+        this.showAndroidDatePickerArrival = this.showAndroidDatePickerArrival.bind(this);
     }
     async showAndroidDatePickerDeparture() {
+        Keyboard.dismiss();
         try {
             const { action, year, month, day } = await DatePickerAndroid.open({
                 minDate: new Date(),
@@ -34,6 +45,7 @@ export default class RoundTrip extends Component {
         }
     }
     async showAndroidDatePickerArrival() {
+        Keyboard.dismiss();
         try {
             const { action, year, month, day } = await DatePickerAndroid.open({
                 minDate: new Date(),
@@ -49,67 +61,76 @@ export default class RoundTrip extends Component {
         }
     }
     async searchFlights() {
-        const dateDeparture = Sugar.Date(this.state.dateDeparture).format('{yyyy}-{MM}-{dd}').raw;
-        const dateArrival = Sugar.Date(this.state.dateArrival).format('{yyyy}-{MM}-{dd}').raw;
+        const { origin, destination, dateDeparture, dateArrival } = this.state;
+        const dateDep = Sugar.Date(dateDeparture).format('{yyyy}-{MM}-{dd}').raw;
+        const dateArr = Sugar.Date(dateArrival).format('{yyyy}-{MM}-{dd}').raw;
+
         const params = {
-            origin: this.state.origin,
-            destination: this.state.destination,
-            dateDeparture,
-            dateArrival
+            origin,
+            destination,
+            dateDeparture: dateDep
+        }
+        const paramsArrival = {
+            origin: destination,
+            destination: origin,
+            dateArrival: dateArr
         }
         const flights = await getFlights(Sugar.Object.toQueryString(params));
-        Actions.flightsResultSearch(flights);
+        const flightsArrival = await getFlights(Sugar.Object.toQueryString(paramsArrival));
+
+        Actions.flightsResultSearch({ flights, flightsArrival });
+    }
+    onFocusOrigin() {
+        this.setState({ focusOrigin: !this.state.focusOrigin });
+    }
+    onChangeTextOrigin(text) {
+        this.setState({ origin: text });
+    }
+    searchCity(text) {
+        this.setState({ origin: text })
+        const cities = citiesArr.filter((item) => {
+            return item.name.toLowerCase().indexOf(text.toLowerCase()) > -1;
+        });
+        this.setState({
+            origin: text,
+            cities
+        })
+    }
+    selectCity(city) {
+        // Keyboard.dismiss();
+        this.setState({
+            origin: `${city.iata} - ${city.name}`
+        });
     }
     render() {
-        const { origin, destination, dateDeparture, dateArrival } = this.state;
-        const disabledButton = !origin || !destination || !dateDeparture || !dateArrival;
+        const { focusOrigin } = this.state;
+        const iconSearch = () => <IconFontAwesome name={'search'} color="rgba(180, 180, 180, 1)" size={22} />;
         return (
             <View style={styles.container}>
-                <View style={styles.containerInput}>
-                    <IconEndtypo name={'aircraft-take-off'} color="rgba(180, 180, 180, 1)" size={24} />
-                    <TextInput style={styles.textInput}
-                        placeholderTextColor={'rgba(180, 180, 180, 1)'}
-                        placeholder={'Ciudad de origen'}
-                        underlineColorAndroid={'rgba(180, 180, 180, 1)'}
-                        onChangeText={(text) => this.setState({ origin: text })}
-                        value={origin} />
-                </View>
-                <View style={styles.containerInput}>
-                    <IconEndtypo name={'aircraft-landing'} color="rgba(180, 180, 180, 1)" size={24} />
-                    <TextInput style={styles.textInput}
-                        placeholderTextColor={'rgba(180, 180, 180, 1)'}
-                        placeholder={'Ciudad destino'}
-                        underlineColorAndroid={'rgba(180, 180, 180, 1)'}
-                        onChangeText={(text) => this.setState({ destination: text })}
-                        value={destination} />
-                </View>
-                <View style={styles.containerInput}>
-                    <IconFontAwesome name={'calendar'} color="rgba(180, 180, 180, 1)" size={24} />
-                    <TextInput style={styles.textInput}
-                        placeholderTextColor={'rgba(180, 180, 180, 1)'}
-                        placeholder={'Fecha salida'}
-                        underlineColorAndroid={'rgba(180, 180, 180, 1)'}
-                        onFocus={() => { Keyboard.dismiss(); this.showAndroidDatePickerDeparture() }}
-                        value={dateDeparture} />
-                </View>
-                <View style={styles.containerInput}>
-                    <IconFontAwesome name={'calendar'} color="rgba(180, 180, 180, 1)" size={24} />
-                    <TextInput style={styles.textInput}
-                        placeholderTextColor={'rgba(180, 180, 180, 1)'}
-                        placeholder={'Fecha llegada'}
-                        underlineColorAndroid={'rgba(180, 180, 180, 1)'}
-                        onFocus={() => { Keyboard.dismiss(); this.showAndroidDatePickerArrival() }}
-                        value={dateArrival} />
-                </View>
-                <View style={styles.btnSearchContainer}>
-                    <TouchableOpacity
-                        style={[styles.btnSearch, disabledButton && styles.buttonDisabled]}
-                        disabled={disabledButton}
-                        onPress={() => !disabledButton && this.searchFlights()}>
-                        <Text style={styles.textTab}>{'BUSCAR'}</Text>
-                    </TouchableOpacity>
-                </View>
+                {focusOrigin ?
+                    <RoundTripForm
+                        onFocusOrigin={this.onFocusOrigin}
+                        onChangeTextOrigin={this.onChangeTextOrigin}
+                        searchFlights={this.searchFlights}
+                        showAndroidDatePickerDeparture={this.showAndroidDatePickerDeparture}
+                        showAndroidDatePickerArrival={this.showAndroidDatePickerArrival}
+                        {...this.state}
+                    /> :
+                    <View>
+                        <InputCustom onChangeText={this.searchCity} icon={iconSearch} />
+                        <FlatList
+                            data={this.state.cities}
+                            keyExtractor={(item) => item.iata}
+                            renderItem={({ item }) => {
+                                return (
+                                    <TouchableOpacity onPress={this.selectCity(item)} style={styles.itemCity}>
+                                        <Text>{`${item.iata} - ${item.name}`}</Text>
+                                    </TouchableOpacity>
+                                )
+                            }}
+                        />
+                    </View>}
             </View>
         )
     }
-};
+}
