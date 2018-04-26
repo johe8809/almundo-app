@@ -2,18 +2,12 @@
 Aplicación final del semillero de Almundo. La aplicación se realizó en React Native y Typescript.
 El usuario en la aplicación va a poder listar los vuelos dependiendo del tipo de consulta que quiera realizar y poder ver el detalle de cada vuelo.
 
-1. ![alt text](screenshots/home.png "Pantalla de inicio")
-2. ![alt text](screenshots/oneway.png "Pantalla de vuelos solo ida")
-3. ![alt text](screenshots/roundtrip.png "Pantalla de vuelos ida y vuelta")
-4. ![alt text](screenshots/multidestination.png "Pantalla de vuelos multidestino")
-
 ## Pre-requisitos
 
 Para correr el proyecto se debe tener instalado principalmente:
 1. [NodeJs](https://nodejs.org/es/download/)
 2. React Native (`npm install -g react-native-cli`)
 3. Emulador de android.
-
 
 ## Instalación
 
@@ -44,6 +38,13 @@ react-native run-android
 
 7. Listado de vuelos para probar en la aplicación
 ![alt text](screenshots/querys.png "Listado de vuelos")
+
+## Capturas
+
+1. ![alt text](screenshots/home.png "Pantalla de inicio")
+2. ![alt text](screenshots/oneway.png "Pantalla de vuelos solo ida")
+3. ![alt text](screenshots/roundtrip.png "Pantalla de vuelos ida y vuelta")
+4. ![alt text](screenshots/multidestination.png "Pantalla de vuelos multidestino")
 
 ## Desarrollador
 Yonnathan Henao
