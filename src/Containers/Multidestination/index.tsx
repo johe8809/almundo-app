@@ -72,8 +72,6 @@ export default class Multidestination extends Component {
                 flights.push(item);
             }
         }
-        console.log(flights);
-
         Actions.flightsResultSearch({ flights })
     }
     onFocus(field) {
