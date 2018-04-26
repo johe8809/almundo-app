@@ -7,6 +7,21 @@ import { citiesArr } from '../../Api/cities';
 import { styles } from './style';
 import OneWayForm from '../../Components/OneWayForm';
 
+const initialState = {
+    origin: {
+        iata: '',
+        name: ''
+    },
+    destination: {
+        iata: '',
+        name: ''
+    },
+    dateDeparture: '',
+    focusOrigin: true,
+    fieldSearch: '',
+    cities: []
+};
+
 export default class OneWay extends Component {
     constructor(props) {
         super(props);
@@ -28,7 +43,8 @@ export default class OneWay extends Component {
         this.searchFlights = this.searchFlights.bind(this);
         this.showAndroidDatePickerDeparture = this.showAndroidDatePickerDeparture.bind(this);
         this.searchCity = this.searchCity.bind(this);
-        this.renderCities = this.renderCities.bind(this)
+        this.renderCities = this.renderCities.bind(this);
+        this.cancelSearch = this.cancelSearch.bind(this);
     }
     async showAndroidDatePickerDeparture() {
         Keyboard.dismiss();
@@ -59,6 +75,7 @@ export default class OneWay extends Component {
         Actions.flightsResultSearch({ flights })
     }
     onFocus(field) {
+        Actions.refresh({ hideNavBar: true });
         this.setState({
             focusOrigin: !this.state.focusOrigin,
             [field]: '',
@@ -75,8 +92,18 @@ export default class OneWay extends Component {
         });
     }
     renderCities(city, field) {
+        Actions.refresh({ hideNavBar: false });
         this.setState({
             [field]: city,
+            focusOrigin: true,
+            cities: []
+        });
+    }
+    cancelSearch(field) {
+        Keyboard.dismiss();
+        Actions.refresh({ hideNavBar: false });
+        this.setState({
+            [field]: initialState[field],
             focusOrigin: true,
             cities: []
         });
@@ -90,6 +117,7 @@ export default class OneWay extends Component {
                     searchCity={this.searchCity}
                     renderCities={this.renderCities}
                     showAndroidDatePickerDeparture={this.showAndroidDatePickerDeparture}
+                    cancelSearch={this.cancelSearch}
                     {...this.state}
                 />
             </View>

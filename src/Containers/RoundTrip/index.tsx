@@ -1,34 +1,40 @@
 import React, { Component } from 'react';
-import { View, TouchableOpacity, Text, Keyboard, DatePickerAndroid, FlatList } from 'react-native';
+import { View, DatePickerAndroid, Keyboard } from 'react-native';
 import Sugar from 'sugar';
 import { Actions } from 'react-native-router-flux';
-import IconFontAwesome from 'react-native-vector-icons/dist/FontAwesome';
 import { getFlights } from '../../Api';
 import { citiesArr } from '../../Api/cities';
-import RoundTripForm from '../../Components/RoundTripForm';
-import InputCustom from '../../Components/InputCustom';
 import { styles } from './style';
+import RoundTripForm from '../../Components/RoundTripForm';
+
+const initialState = {
+    origin: {
+        iata: '',
+        name: ''
+    },
+    destination: {
+        iata: '',
+        name: ''
+    },
+    dateDeparture: '',
+    dateArrival: '',
+    focusOrigin: true,
+    fieldSearch: '',
+    cities: []
+};
 
 export default class RoundTrip extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            origin: '',
-            destination: 'CLO',
-            dateDeparture: '08 May 2018',
-            dateArrival: '12 May 2018',
-            focusOrigin: true,
-            cities: []
-        }
-        this.onFocusOrigin = this.onFocusOrigin.bind(this);
-        this.onChangeTextOrigin = this.onChangeTextOrigin.bind(this);
+        this.state = initialState;
+        this.onFocus = this.onFocus.bind(this);
         this.searchFlights = this.searchFlights.bind(this);
+        this.showAndroidDatePicker = this.showAndroidDatePicker.bind(this);
         this.searchCity = this.searchCity.bind(this);
-        this.selectCity = this.selectCity.bind(this);
-        this.showAndroidDatePickerDeparture = this.showAndroidDatePickerDeparture.bind(this);
-        this.showAndroidDatePickerArrival = this.showAndroidDatePickerArrival.bind(this);
+        this.renderCities = this.renderCities.bind(this);
+        this.cancelSearch = this.cancelSearch.bind(this);
     }
-    async showAndroidDatePickerDeparture() {
+    async showAndroidDatePicker(field) {
         Keyboard.dismiss();
         try {
             const { action, year, month, day } = await DatePickerAndroid.open({
@@ -38,23 +44,7 @@ export default class RoundTrip extends Component {
             if (action !== DatePickerAndroid.dismissedAction) {
                 const date = `${year}-${month + 1}-${day}`;
                 const dateSelected = Sugar.Date(date).format('{dd} {mon} {yyyy}', 'es');
-                this.setState({ dateDeparture: dateSelected.raw })
-            }
-        } catch ({ code, message }) {
-            console.warn('Cannot open date picker', message);
-        }
-    }
-    async showAndroidDatePickerArrival() {
-        Keyboard.dismiss();
-        try {
-            const { action, year, month, day } = await DatePickerAndroid.open({
-                minDate: new Date(),
-                date: new Date()
-            });
-            if (action !== DatePickerAndroid.dismissedAction) {
-                const date = `${year}-${month + 1}-${day}`;
-                const dateSelected = Sugar.Date(date).format('{dd} {mon} {yyyy}', 'es');
-                this.setState({ dateArrival: dateSelected.raw })
+                this.setState({ [field]: dateSelected.raw })
             }
         } catch ({ code, message }) {
             console.warn('Cannot open date picker', message);
@@ -66,13 +56,13 @@ export default class RoundTrip extends Component {
         const dateArr = Sugar.Date(dateArrival).format('{yyyy}-{MM}-{dd}').raw;
 
         const params = {
-            origin,
-            destination,
+            origin: origin.iata,
+            destination: destination.iata,
             dateDeparture: dateDep
         }
         const paramsArrival = {
-            origin: destination,
-            destination: origin,
+            origin: destination.iata,
+            destination: origin.iata,
             dateArrival: dateArr
         }
         const flights = await getFlights(Sugar.Object.toQueryString(params));
@@ -80,56 +70,52 @@ export default class RoundTrip extends Component {
 
         Actions.flightsResultSearch({ flights, flightsArrival });
     }
-    onFocusOrigin() {
-        this.setState({ focusOrigin: !this.state.focusOrigin });
+    onFocus(field) {
+        Actions.refresh({ hideNavBar: true });
+        this.setState({
+            focusOrigin: !this.state.focusOrigin,
+            [field]: '',
+            fieldSearch: field
+        });
     }
-    onChangeTextOrigin(text) {
-        this.setState({ origin: text });
-    }
-    searchCity(text) {
-        this.setState({ origin: text })
+    searchCity(text, field) {
         const cities = citiesArr.filter((item) => {
             return item.name.toLowerCase().indexOf(text.toLowerCase()) > -1;
         });
         this.setState({
-            origin: text,
+            [field]: text,
             cities
-        })
+        });
     }
-    selectCity(city) {
-        // Keyboard.dismiss();
+    renderCities(city, field) {
+        Actions.refresh({ hideNavBar: false });
         this.setState({
-            origin: `${city.iata} - ${city.name}`
+            [field]: city,
+            focusOrigin: true,
+            cities: []
+        });
+    }
+    cancelSearch(field) {
+        Keyboard.dismiss();
+        Actions.refresh({ hideNavBar: false });
+        this.setState({
+            [field]: initialState[field],
+            focusOrigin: true,
+            cities: []
         });
     }
     render() {
-        const { focusOrigin } = this.state;
-        const iconSearch = () => <IconFontAwesome name={'search'} color="rgba(180, 180, 180, 1)" size={22} />;
         return (
             <View style={styles.container}>
-                {focusOrigin ?
-                    <RoundTripForm
-                        onFocusOrigin={this.onFocusOrigin}
-                        onChangeTextOrigin={this.onChangeTextOrigin}
-                        searchFlights={this.searchFlights}
-                        showAndroidDatePickerDeparture={this.showAndroidDatePickerDeparture}
-                        showAndroidDatePickerArrival={this.showAndroidDatePickerArrival}
-                        {...this.state}
-                    /> :
-                    <View>
-                        <InputCustom onChangeText={this.searchCity} icon={iconSearch} />
-                        <FlatList
-                            data={this.state.cities}
-                            keyExtractor={(item) => item.iata}
-                            renderItem={({ item }) => {
-                                return (
-                                    <TouchableOpacity onPress={this.selectCity(item)} style={styles.itemCity}>
-                                        <Text>{`${item.iata} - ${item.name}`}</Text>
-                                    </TouchableOpacity>
-                                )
-                            }}
-                        />
-                    </View>}
+                <RoundTripForm
+                    onFocus={this.onFocus}
+                    searchFlights={this.searchFlights}
+                    searchCity={this.searchCity}
+                    renderCities={this.renderCities}
+                    showAndroidDatePicker={this.showAndroidDatePicker}
+                    cancelSearch={this.cancelSearch}
+                    {...this.state}
+                />
             </View>
         )
     }

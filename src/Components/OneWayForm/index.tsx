@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, FlatList } from 'react-native';
 import IconEndtypo from 'react-native-vector-icons/dist/Entypo';
 import IconFontAwesome from 'react-native-vector-icons/dist/FontAwesome';
+import IconMaterialIcons from 'react-native-vector-icons/dist/MaterialIcons';
 import InputCustom from '../InputCustom';
 import { styles } from './style';
 
@@ -17,14 +18,18 @@ const OneWayForm = (props) => {
         cities,
         renderCities,
         focusOrigin,
-        fieldSearch
+        fieldSearch,
+        cancelSearch
     } = props;
 
     const disabledButton = !origin.iata || !destination.iata || !dateDeparture;
     const iconOrgin = () => <IconEndtypo name={'aircraft-take-off'} color="rgba(180, 180, 180, 1)" size={24} />;
     const iconDestination = () => <IconEndtypo name={'aircraft-landing'} color="rgba(180, 180, 180, 1)" size={24} />;
     const iconCalendar = () => <IconFontAwesome name={'calendar'} color="rgba(180, 180, 180, 1)" size={24} />;
-    const iconSearch = () => <IconFontAwesome name={'search'} color="rgba(180, 180, 180, 1)" size={22} />;
+    const iconBack = () => {
+        return <IconMaterialIcons name={'arrow-back'} color="rgba(180, 180, 180, 1)"
+            onPress={() => cancelSearch(fieldSearch)} size={24} />;
+    }
     return (
         <View>
             {focusOrigin ?
@@ -47,7 +52,7 @@ const OneWayForm = (props) => {
                     </View>
                 </View> :
                 <View>
-                    <InputCustom icon={iconSearch}
+                    <InputCustom icon={iconBack}
                         onChangeText={(text) => searchCity(text, fieldSearch)} />
                     <FlatList
                         data={cities}
