@@ -7,7 +7,7 @@
     "android": "npm run build && concurrently -r 'npm run watch' 'react-native run-android'",
     "ios": "npm run build && concurrently -r 'npm run watch' 'react-native run-ios'",
     "test": "jest --coverage",
-    "tsc": "tsc --noLib",
+    "tsc": "tsc",
     "clean": "rimraf lib",
     "build": "npm run clean && gulp resource-copy && npm run tsc --",
     "lint": "tslint src/**/*.ts",
@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "babel-jest": "22.4.3",
+    "@types/react": "^16.3.13",
     "babel-preset-react-native": "4.0.0",
     "jest": "22.4.3",
     "react-test-renderer": "16.3.1",

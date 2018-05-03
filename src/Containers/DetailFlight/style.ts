@@ -26,22 +26,18 @@ export const styles = {
         paddingRight: 8,
     },
     price: {
-        // color: 'rgba(255, 255, 255, 1)',
         textAlign: 'right'
     },
     iata: {
         fontSize: 24,
         textAlign: 'center',
         fontWeight: 'bold',
-        // color: '#fff',
     },
     datetime: {
         textAlign: 'center',
-        // color: '#fff',
     },
     flightDatetime: {
         flexGrow: 2,
-        // backgroundColor: 'rgba(79, 195, 247, 1)',
         borderWidth: 1,
         borderColor: 'rgba(97, 97, 97, 1)',
         padding: 8,

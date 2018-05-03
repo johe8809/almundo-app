@@ -1,40 +1,44 @@
 {
   "compilerOptions": {
-    "module": "es6",
-    "target": "esnext",
+    "module": "es2015",
+    "target": "es2015",
     "moduleResolution": "node",
     "jsx": "react",
     "outDir": "lib",
     "rootDir": "src",
     "allowSyntheticDefaultImports": true,
-		"noImplicitAny": false,
+    "noImplicitAny": false,
     "preserveConstEnums": true,
     "allowJs": false,
-    "sourceMap": false, 
-		"noImplicitReturns": true,
-		"noUnusedParameters": true,
-		"noUnusedLocals": true,
-		"declaration": true,
-		"removeComments": true,
-		"noLib": true,
-		"emitDecoratorMetadata": true,
+    "noImplicitReturns": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": false,
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "strict": true,
+    "lib": [
+      "es2017",
+      "es6",
+      "es7",
+      "esnext.asynciterable"
+    ],
   },
   "filesGlob": [
-		"src/**/*.ts",
-		"src/**/*.tsx"
-	],
-	"types": [
-		"react",
-		"react-native",
-		"jest"
-	],
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ],
+  "types": [
+    "react",
+    "react-native",
+    "jest"
+  ],
   "exclude": [
     "android",
     "ios",
     "lib",
-    "node_modules"
-  ],
-  "compileOnSave": false
+    "node_modules",
+    "node_modules/sugar-inflections/sugar.d.ts",
+    "node_modules/@types/node/index.d.ts"
+  ]
 }

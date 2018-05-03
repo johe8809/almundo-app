@@ -2,7 +2,8 @@ import React from 'react';
 import { View, Text, TouchableOpacity, FlatList } from 'react-native';
 import IconMaterialIcons from 'react-native-vector-icons/dist/MaterialIcons';
 import InputCustom from '../InputCustom';
-import { iconOrgin, iconDestination, iconCalendar } from '../../Helpers';
+import DatePicker from '../DatePicker';
+import { iconOrgin, iconDestination, iconCalendar } from '../IconCustom';
 import { styles } from './style';
 
 const OneWayForm = (props) => {
@@ -10,7 +11,6 @@ const OneWayForm = (props) => {
         onFocus,
         searchCity,
         searchFlights,
-        showAndroidDatePicker,
         origin,
         destination,
         dateDeparture,
@@ -18,7 +18,8 @@ const OneWayForm = (props) => {
         renderCities,
         focusOrigin,
         fieldSearch,
-        cancelSearch
+        cancelSearch,
+        setDateDeparture
     } = props;
 
     const disabledButton = !origin.iata || !destination.iata || !dateDeparture;
@@ -37,8 +38,8 @@ const OneWayForm = (props) => {
                     <InputCustom placeholder={'Ciudad destino'} onFocus={() => onFocus('destination')}
                         icon={iconDestination} onChangeText={searchCity}
                         value={`${destination.name}`} />
-                    <InputCustom placeholder={'Fecha salida'} onFocus={() => showAndroidDatePicker('dateDeparture')}
-                        value={dateDeparture} icon={iconCalendar} />
+                    <DatePicker placeholder={'Fecha salida'} dateValue={dateDeparture}
+                        onChangeText={(text) => setDateDeparture(text)} />
                     <View style={styles.btnSearchContainer}>
                         <TouchableOpacity
                             style={[styles.btnSearch, disabledButton && styles.buttonDisabled]}

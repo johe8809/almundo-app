@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, FlatList } from 'react-native';
 import IconMaterialIcons from 'react-native-vector-icons/dist/MaterialIcons';
 import InputCustom from '../InputCustom';
-import { iconOrgin, iconDestination, iconCalendar } from '../../Helpers';
+import { iconOrgin, iconDestination, iconCalendar } from '../IconCustom';
 import { styles } from './style';
 
 const RoundTripForm = (props) => {
