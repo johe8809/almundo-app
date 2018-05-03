@@ -1,15 +1,15 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, DatePickerAndroid } from 'react-native';
 import IconMaterialIcons from 'react-native-vector-icons/dist/MaterialIcons';
 import InputCustom from '../InputCustom';
-import { iconOrgin, iconDestination, iconCalendar } from '../../Helpers';
+import DatePicker from '../DatePicker';
+import { iconOrgin, iconDestination, iconCalendar } from '../IconCustom';
 import { styles } from './style';
 
 const MultidestinationForm = (props) => {
     const {
         onFocus,
         searchCity,
-        showAndroidDatePicker,
         origin,
         destination,
         dateDeparture,
@@ -17,7 +17,8 @@ const MultidestinationForm = (props) => {
         renderCities,
         focusOrigin,
         fieldSearch,
-        cancelSearch
+        cancelSearch,
+        setDateDeparture
     } = props;
 
     const iconBack = () => {
@@ -30,12 +31,12 @@ const MultidestinationForm = (props) => {
             {focusOrigin ?
                 <View>
                     <InputCustom placeholder={'Ciudad de origen'} onFocus={() => onFocus('origin')} icon={iconOrgin}
-                        onChangeText={(text) => searchCity(text, 'origin')} value={`${origin.name}`} />
+                        onChangeText={(text) => searchCity(text, 'origin')} value={`${origin.name || ''}`} />
                     <InputCustom placeholder={'Ciudad destino'} onFocus={() => onFocus('destination')}
                         icon={iconDestination} onChangeText={(text) => searchCity(text, 'destinationa')}
-                        value={`${destination.name}`} />
-                    <InputCustom placeholder={'Fecha salida'} onFocus={() => showAndroidDatePicker('dateDeparture')}
-                        value={dateDeparture} icon={iconCalendar} />
+                        value={`${destination.name || ''}`} />
+                    <DatePicker placeholder={'Fecha salida'} dateValue={dateDeparture}
+                        onChangeText={(text) => setDateDeparture(text)} />
                 </View> :
                 <View>
                     <InputCustom icon={iconBack}
@@ -44,10 +45,11 @@ const MultidestinationForm = (props) => {
                         data={cities}
                         keyExtractor={(item) => item.iata}
                         renderItem={({ item }) => {
+                            const { iata, name } = item;
                             return (
                                 <TouchableOpacity onPress={() => renderCities(item, fieldSearch)}
                                     style={styles.itemCity}>
-                                    <Text>{`${item.iata} - ${item.name}`}</Text>
+                                    <Text>{`${iata || ''} - ${name || ''}`}</Text>
                                 </TouchableOpacity>
                             )
                         }}

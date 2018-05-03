@@ -1,4 +1,5 @@
-export const styles = {
+import { StyleSheet } from 'react-native';
+export const styles: any = {
     container: {
         padding: 8,
         margin: 8,
@@ -66,4 +67,4 @@ export const styles = {
         fontSize: 14,
         color: 'rgba(255, 255, 255, 1)'
     },
-}
+};

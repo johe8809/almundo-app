@@ -4,58 +4,39 @@ import Sugar from 'sugar';
 import { Actions } from 'react-native-router-flux';
 import IconFontAwesome from 'react-native-vector-icons/dist/FontAwesome';
 import IconMaterialIcons from 'react-native-vector-icons/dist/MaterialIcons';
+import { PropsMultidestination as Props, StateMultidestination as State } from '../../Interfaces/Multidestination';
 import { getFlights } from '../../Api';
 import { citiesArr } from '../../Api/cities';
 import { styles } from './style';
 import MultidestinationForm from '../../Components/MultidestinationForm';
 
-const initialState = {
-    origin: {
-        iata: '',
-        name: ''
-    },
-    destination: {
-        iata: '',
-        name: ''
-    },
-    dateDeparture: '',
-    focusOrigin: true,
-    fieldSearch: '',
-    cities: [],
-    openForm: false,
-    flightsAdded: [],
-    disabledButton: false
-};
-
-export default class Multidestination extends Component {
-    constructor(props) {
+export default class Multidestination extends Component<Props, State> {
+    constructor(props: Props) {
         super(props);
-        this.state = initialState;
+        this.state = Object.assign(this.initialState);
         this.onFocus = this.onFocus.bind(this);
         this.searchFlights = this.searchFlights.bind(this);
-        this.showAndroidDatePicker = this.showAndroidDatePicker.bind(this);
         this.searchCity = this.searchCity.bind(this);
         this.renderCities = this.renderCities.bind(this);
         this.cancelSearch = this.cancelSearch.bind(this);
+        this.setDateDeparture = this.setDateDeparture.bind(this);
     }
-    async showAndroidDatePicker(field) {
-        Keyboard.dismiss();
-        try {
-            const { action, year, month, day } = await DatePickerAndroid.open({
-                minDate: new Date(),
-                date: new Date()
-            });
-            if (action !== DatePickerAndroid.dismissedAction) {
-                const date = `${year}-${month + 1}-${day}`;
-                const dateSelected = Sugar.Date(date).format('{dd} {mon} {yyyy}', 'es');
-                this.setState({ [field]: dateSelected.raw })
-            }
-        } catch ({ code, message }) {
-            console.warn('Cannot open date picker', message);
+    get initialState() {
+        return {
+            origin: { iata: '', name: '' },
+            destination: { iata: '', name: '' },
+            dateDeparture: '',
+            focusOrigin: true,
+            fieldSearch: '',
+            cities: [],
+            openForm: false,
+            disabledButton: false,
+            flightsAdded: []
         }
     }
     async searchFlights() {
         let flights = [];
+        let flights2 = [];
         const { flightsAdded } = this.state;
 
         for (let i = 0; i < flightsAdded.length; i++) {
@@ -108,25 +89,29 @@ export default class Multidestination extends Component {
     addFlight() {
         const { flightsAdded } = this.state;
         flightsAdded.push(this.state);
-        const stateInitial = Sugar.Object.filter(initialState, (item) => item !== flightsAdded);
-        this.setState(stateInitial);
+        const _initialState: any = this.initialState;
+        delete _initialState[`flightsAdded`];
+        this.setState(_initialState);
     }
     cancelSearch(field) {
         Keyboard.dismiss();
         Actions.refresh({ hideNavBar: false });
         this.setState({
-            [field]: initialState[field],
+            [field]: this.initialState[field],
             focusOrigin: true,
             cities: []
         });
     }
+    setDateDeparture(text) {
+        this.setState({ dateDeparture: text });
+    }
     render() {
         const { disabledButton, openForm, focusOrigin, flightsAdded, origin, destination, dateDeparture } = this.state;
-        const disabledAccept = !origin.iata || !destination.iata || !dateDeparture;
+        const disabledAccept = !origin || !destination || !dateDeparture;
         return (
             <View style={styles.container}>
                 {focusOrigin === true &&
-                    <View showsVerticalScrollIndicator={false}>
+                    <View>
                         {flightsAdded.map((item, index) => {
                             return (
                                 <View key={index.toString()}>
@@ -149,8 +134,8 @@ export default class Multidestination extends Component {
                             addFlight={this.addFlight}
                             searchCity={this.searchCity}
                             renderCities={this.renderCities}
-                            showAndroidDatePicker={this.showAndroidDatePicker}
                             cancelSearch={this.cancelSearch}
+                            setDateDeparture={this.setDateDeparture}
                             {...this.state}
                         />
                         {focusOrigin === true &&

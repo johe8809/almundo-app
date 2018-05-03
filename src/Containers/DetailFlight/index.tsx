@@ -15,10 +15,6 @@ export default class DetailFlight extends Component {
           <Text style={styles.datetime}>{`Sale ${dateDeparture}`}</Text>
           <Text style={styles.datetime}>{hourDeparture}</Text>
         </View>
-        {/* <View style={styles.arrow}>
-        <IconEndtypo name={'arrow-long-right'} color="rgba(97, 97, 97, 1)" size={24}
-          style={{ textAlign: 'center' }} />
-      </View> */}
         <View style={styles.flightDatetime}>
           <Text style={styles.iata}>{origin.iata}</Text>
           <Text style={styles.datetime}>{`Llega ${dateArrival}`}</Text>
